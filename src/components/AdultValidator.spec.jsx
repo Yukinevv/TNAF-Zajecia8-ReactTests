@@ -41,6 +41,19 @@ describe('AdultValidator', () => {
 		expect(alertBox).toHaveTextContent(/are you really so young/i);
 	});
 
+	it('should show TO YOUNG alert after entering value smaller than min', async () => {
+		// given
+		render(<AdultValidator min={5} max={100} />);
+		const input = screen.getByRole('textbox', { name: /put your age here/i });
+
+		// when
+		await userEvent.type(input, '3'); // <- symulowanie akcji użytkownika
+
+		// then
+		const alertBox = await screen.findByRole('alert'); // <- find(ByRole) używamy do elementów, które dopiero mają się pojawić
+		expect(alertBox).toHaveTextContent(/are you really so young/i);
+	});
+
 	it('should show ARE YOU REALLY SO OLD alert after entring value higher than max', async () => {
 		// given
 		render(<AdultValidator />);

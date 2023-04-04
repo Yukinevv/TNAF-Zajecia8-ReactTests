@@ -40,4 +40,46 @@ describe('AdultValidator', () => {
 		// test musi być asynchroniczny (skladnia async await), alert pojawi się dopiero po wpisaniu przez nas wartości dlatego musimy na nią "poczekać"
 		expect(alertBox).toHaveTextContent(/are you really so young/i);
 	});
+
+	it('should show ARE YOU REALLY SO OLD alert after entring value higher than max', async () => {
+		// given
+		render(<AdultValidator />);
+		const input = screen.getByRole('textbox', { name: /put your age here/i });
+
+		// when
+		await userEvent.type(input, '101'); // <- symulowanie akcji użytkownika
+
+		// then
+		const alertBox = await screen.findByRole('alert');
+
+		expect(alertBox).toHaveTextContent(/Are you really so old/i);
+	});
+
+	it('should show YOU ARE GROWN UP alert after entring value higher than max', async () => {
+		// given
+		render(<AdultValidator min={3} max={50} />);
+		const input = screen.getByRole('textbox', { name: /put your age here/i });
+
+		// when
+		await userEvent.type(input, '18'); // <- symulowanie akcji użytkownika
+
+		// then
+		const alertBox = await screen.findByRole('alert');
+
+		expect(alertBox).toHaveTextContent(/You are grown up/i);
+	});
+
+	it('should show ARE YOU REALLY SO OLD alert after entring value higher than max', async () => {
+		// given
+		render(<AdultValidator min={3} max={50} />);
+		const input = screen.getByRole('textbox', { name: /put your age here/i });
+
+		// when
+		await userEvent.type(input, '51'); // <- symulowanie akcji użytkownika
+
+		// then
+		const alertBox = await screen.findByRole('alert');
+
+		expect(alertBox).toHaveTextContent(/Are you really so old/i);
+	});
 });
